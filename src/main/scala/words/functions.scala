@@ -8,7 +8,7 @@ object Processing {
      * Strips the initial and final license.
      * Use [[Shakespeare.endOfInitialLicense]] and [[Shakespeare.startOfFinalLicense]].
      */
-    def stripLicenses: Iterator[String] = ???
+    def stripLicenses: Iterator[String] = it.drop(endOfInitialLicense).take(startOfFinalLicense - endOfInitialLicense)
   }
 
   def toWords(line: String): List[String] = line.split("\\W").toList
