@@ -4,51 +4,43 @@ import scala.io.Source
 import Shakespeare._
 
 
-/**
- * The dramatis personae is the part of a play or novel that enumerates the characters that play a role in it.
- * See dramatisExemple for a scala string that contains an example of a dramatis personae.
- */
+/** The dramatis personae is the part of a play or novel that enumerates the characters that play a role in it.
+  * See [[Personae.dramatisExample]] for a scala string that contains an example of a dramatis personae.
+  */
 object Personae {
 
   sealed trait ParsingState
-
   case object Dramatis extends ParsingState
-
   case object Other extends ParsingState
 
   type Accumulator = (Set[String], ParsingState)
 
   val zeroAcc: Accumulator = (Set.empty[String], Other)
 
-  def scan(s: Source): Set[String] = {
-
-    val (personae, _) = s.getLines().map(_.trim).foldLeft(zeroAcc)(parsePersonae)
-
+  def scan(s: Iterator[String]): Set[String] = {
+    val (personae, _) = s.map(_.trim).foldLeft(zeroAcc)(parsePersonae)
     personae
   }
 
-/** given the current accumulated set of personae and the current parsing state
-  * and the next line
-  * the function returns the new accumulated set of personae and the new parsing state.
-  *
-  * Use the function isDramatisStart to determine whether the next lines will be part of the dramatis personae.
-  * Use the function isDramatisEnd to determine whether the following lines are not part of the dramatis personae.
-
-  */
+  /** Given the current accumulated set of personae, the current parsing state, and the next line,
+    * returns the new accumulated set of personae and the new parsing state.
+    *
+    * Use the function [[Shakespeare.isDramatisStart]] to determine whether the next lines will be part of the dramatis personae.
+    * Use the function [[Shakespeare.isDramatisEnd]] to determine whether the following lines are not part of the dramatis personae.
+    */
   def parsePersonae(acc: Accumulator, line: String): Accumulator = ???
 
 
-  /** takes a Dramatis Personae line string without outer whitespace and returns the person if any */
+  /** Takes a Dramatis Personae line string without outer whitespace and returns the person, if any. */
   def parsePersona(line: String): Option[String] = {
     val prefix = line.takeWhile(c => c != ',' && (c.isUpper || c.isWhitespace))
-    if (prefix.size <= 1 || (prefix.size == 3 && prefix.charAt(1).isWhitespace)) {
+    if (prefix.size <= 1 || (prefix.size == 3 && prefix.charAt(1).isWhitespace))
       None
-    } else {
+    else
       Some(prefix)
-    }
   }
 
-  private val dramatisExample=
+  private val dramatisExample =
     """
       |1606
       |
