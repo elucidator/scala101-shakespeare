@@ -25,7 +25,10 @@ object InMemory {
     * Use the function [[Processing.toWords]] to change a line into a list of words.
     * Use the function [[count]].
     */
-  def wordCount(it: Iterator[String]): Map[String, Int] = ???
+  def wordCount(it: Iterator[String]): Map[String, Int] = {
+    val words = it.stripLicenses.toList.flatMap(toWords)
+    count(words)
+  }
 
   /** Takes a list of words and returns a map of words to their word count. */
   def count(words: List[String]): Map[String, Int] =
