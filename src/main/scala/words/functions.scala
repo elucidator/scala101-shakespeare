@@ -47,11 +47,13 @@ object Lazy {
     *
     * Use the function [[count]] to combine the incoming words into a single outcome.
     */
-  def wordCount(it: Iterator[String]): Map[String, Int] = ???
+  def wordCount(it: Iterator[String]): Map[String, Int] =
+    it.stripLicenses.map(toWords).foldLeft(Map.empty[String, Int])(count)
 
   /** Given the previous map from word to word count and the words from the current line,
     * returns the updated map from word to word count.
     */
-  def count(acc: Map[String, Int], words: List[String]): Map[String, Int] = ???
+  def count(acc: Map[String, Int], words: List[String]): Map[String, Int] =
+    words.foldLeft(acc)((map, word) => map.updated(word, map.getOrElse(word, 0) + 1))
 }
 
